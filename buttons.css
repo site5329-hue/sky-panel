@@ -1,0 +1,23 @@
+<!-- دکمه پایه -->
+<button class="glass-btn">دکمه شیشه‌ای</button>
+
+<!-- دکمه آبی -->
+<button class="glass-btn glass-btn-blue">آبی</button>
+
+<!-- دکمه سبز -->
+<button class="glass-btn glass-btn-green">سبز</button>
+
+<!-- دکمه قرمز -->
+<button class="glass-btn glass-btn-red">قرمز</button>
+
+<!-- دکمه گرادیانتی -->
+<button class="glass-btn glass-btn-gradient">خفن</button>
+
+<!-- دکمه گرد -->
+<button class="glass-btn glass-btn-circle">+</button>
+
+<!-- گروه دکمه -->
+<div class="btn-group">
+  <button class="glass-btn glass-btn-blue glass-btn-sm">کپی</button>
+  <button class="glass-btn glass-btn-green glass-btn-sm">QR</button>
+</div>

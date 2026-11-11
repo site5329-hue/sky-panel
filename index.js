@@ -2,12 +2,15 @@ const express = require('express');
 const TelegramBot = require('node-telegram-bot-api');
 
 const app = express();
+
+// کلید: باید از process.env.PORT استفاده شود، Render به طور خودکار این متغیر را تزریق می‌کند
+// 10000 فقط برای اجرای محلی است، Render به طور پیش‌فرض از 10000 استفاده می‌کند
 const port = process.env.PORT || 10000;
 
-// بخش Express: گوش دادن به پورت برای اینکه Render سرویس را زنده تشخیص دهد
 app.get('/', (req, res) => res.send('Bot is running'));
 app.get('/health', (req, res) => res.send('OK'));
 
+// کلید: باید روی 0.0.0.0 گوش داده شود، نه localhost یا 127.0.0.1
 app.listen(port, '0.0.0.0', () => {
   console.log(`Web server listening on port ${port}`);
 });
@@ -19,7 +22,6 @@ if (!token) {
 } else {
   const bot = new TelegramBot(token, { polling: true });
 
-  // پاسخ به دستور /start
   bot.onText(/\/start/, (msg) => {
     bot.sendMessage(msg.chat.id, '🚧 ربات در حال تعمیرات است. لطفاً بعداً مراجعه کنید.');
   });

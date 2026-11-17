@@ -1,0 +1,922 @@
+---HTML---
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" class="dark">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Z E U S - Local Scanner</title>
+	<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+	<script src="https://cdn.tailwindcss.com"></script>
+	<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+	<script>
+		tailwind.config = {
+			darkMode: 'class',
+			theme: {
+				extend: {
+					fontFamily: { sans: ['Vazirmatn', 'sans-serif'] },
+					colors: { 
+						amoled: { bg: '#000105', card: '#040914', input: '#081224', border: '#102040' } 
+					}
+				}
+			}
+		}
+	</script>
+	<style>
+		body { font-family: 'Vazirmatn', sans-serif; }
+		::-webkit-scrollbar { width: 6px; height: 6px; }
+		::-webkit-scrollbar-track { background: #000105; border-radius: 4px; }
+		::-webkit-scrollbar-thumb { background: #102040; border-radius: 4px; }
+		::-webkit-scrollbar-thumb:hover { background: #172e5c; }
+		:root {
+			--bg-tint: rgba(16, 32, 64, 0.4); 
+		}
+		@media (max-height: 800px) { html { font-size: 14px; } }
+		@media (max-height: 650px) { html { font-size: 12px; } }
+		.ambient {
+			position: fixed; inset: 0; z-index: 0; pointer-events: none;
+			background:
+				radial-gradient(700px 500px at 12% 20%, var(--bg-tint), transparent 60%),
+				radial-gradient(800px 600px at 90% 90%, var(--bg-tint), transparent 60%);
+		}
+	</style>
+</head>
+<body class="bg-amoled-bg text-zinc-100 min-h-screen flex flex-col items-center justify-center py-4 md:py-6 px-4 relative overflow-y-auto gap-4">
+	<div class="ambient"></div>
+	
+	<div class="w-full max-w-lg md:max-w-5xl bg-amoled-card border border-amoled-border rounded-md shadow-2xl overflow-hidden relative z-10 flex flex-col flex-1 min-h-0 max-h-[85vh]">
+		
+		<div class="px-6 py-4 border-b border-amoled-border flex justify-between items-center bg-zinc-900/50 shrink-0">
+			<div class="flex items-center gap-2 relative">
+				<svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+				<h3 class="font-bold text-zinc-100 text-sm">اسکنر لوکال آی‌پی تمیز زئوس</h3>
+				<span id="core-status" class="flex w-3 h-3 ml-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)] transition-colors duration-300 relative" title="هسته متصل است">
+					<span id="core-status-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+				</span>
+			</div>
+			<span class="px-2 py-0.5 bg-blue-900/30 text-blue-400 border border-blue-800/50 rounded-md text-[10px] font-bold" dir="ltr">v1.2 SNI IP scanner</span>
+		</div>
+		
+		<div class="p-4 md:p-5 flex flex-col md:flex-row gap-4 md:gap-6 flex-1 min-h-0 overflow-y-auto md:overflow-hidden">
+			
+			<div class="flex flex-col gap-4 w-full md:w-[45%] lg:w-[40%] overflow-y-auto shrink-0 md:pl-2">
+				<div class="shrink-0">
+					<label class="block text-xs font-bold mb-1.5 text-zinc-300">آدرس پنل یا دامنه ورکر (SNI)</label>
+					<input type="text" id="sni-input" placeholder="مثال: panel.domain.com یا لینک کامل" dir="ltr" class="w-full px-3 py-2.5 bg-amoled-input border border-amoled-border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs font-mono text-left text-zinc-100 transition">
+				</div>
+				<div class="space-y-2 shrink-0">
+					<div class="border border-amoled-border rounded-md overflow-hidden bg-amoled-input/50">
+						<button onclick="toggleAccordion('github')" class="w-full px-3 py-2.5 flex justify-between items-center hover:bg-zinc-800/30 transition text-xs font-bold text-zinc-300">
+							<span class="flex items-center gap-2">
+								<svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z"/></svg>
+								دریافت آی‌پی از مخزن
+							</span>
+							<svg id="icon-github" class="w-4 h-4 transform transition-transform duration-200 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+						</button>
+						<div id="content-github" class="p-3 space-y-4 border-t border-amoled-border bg-amoled-card transition-all">
+							<div class="grid grid-cols-2 gap-3">
+								<div>
+									<label class="block text-[10px] font-medium mb-1.5 text-zinc-400">نوع داده</label>
+									<select id="data-type-select" onchange="loadIpsFromGithub()" class="w-full px-3 py-2 bg-amoled-input border border-amoled-border rounded-md text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 text-zinc-300 cursor-pointer">
+										<option value="ips.txt">IPv4 (ips.txt)</option>
+										<option value="ip6.txt">IPv6 (ip6.txt)</option>
+										<option value="dom.txt">دامنه (dom.txt)</option>
+									</select>
+								</div>
+								<div>
+									<label class="block text-[10px] font-medium mb-1.5 text-zinc-400">تعداد دریافت</label>
+									<input type="number" id="ip-count" min="1" max="500" value="20" dir="ltr" class="w-full px-3 py-2 bg-amoled-input border border-amoled-border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs font-mono text-center text-zinc-100 transition disabled:opacity-50">
+								</div>
+							</div>
+							<button type="button" id="btn-fetch" onclick="fetchIpsForScan()" class="w-full py-2 bg-transparent border border-blue-600 text-blue-500 hover:bg-blue-900/40 hover:text-blue-400 font-bold rounded-md text-xs transition shadow-sm flex items-center justify-center gap-2" disabled>
+								<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+								در حال ارتباط با گیت‌هاب...
+							</button>
+						</div>
+					</div>
+					<div class="border border-amoled-border rounded-md overflow-hidden bg-amoled-input/50">
+						<button onclick="toggleAccordion('manual')" class="w-full px-3 py-2.5 flex justify-between items-center hover:bg-zinc-800/30 transition text-xs font-bold text-zinc-300">
+							<span class="flex items-center gap-2">
+								<svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+								ورود دستی آی‌پی
+							</span>
+							<svg id="icon-manual" class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+						</button>
+						<div id="content-manual" class="p-3 space-y-4 border-t border-amoled-border bg-amoled-card transition-all hidden">
+							<div>
+								<label class="block text-[10px] font-medium mb-1.5 text-zinc-400">آی‌پی‌ها را وارد کنید (هر خط یک آی‌پی)</label>
+								<textarea id="manual-ips" rows="3" dir="ltr" class="w-full px-3 py-2 bg-amoled-input border border-amoled-border rounded-md focus:outline-none focus:ring-1 focus:ring-purple-500 text-xs font-mono text-left text-zinc-100 transition resize-y" placeholder="104.21.51.2&#10;172.67.10.1"></textarea>
+							</div>
+							<button type="button" onclick="loadManualIps()" class="w-full py-2 bg-transparent border border-purple-600 text-purple-500 hover:bg-purple-900/40 hover:text-purple-400 font-bold rounded-md text-xs transition shadow-sm flex items-center justify-center gap-2">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+								بارگذاری آی‌پی‌های دستی
+							</button>
+						</div>
+					</div>
+				</div> 
+				
+				<div class="relative py-2 shrink-0 md:hidden">
+					<div class="absolute inset-0 flex items-center"><div class="w-full border-t border-zinc-800"></div></div>
+					<div class="relative flex justify-center text-xs"><span class="bg-amoled-card px-2 text-zinc-500 font-bold">بخش اسکنر</span></div>
+				</div>
+				
+				<div id="scan-controls-section" class="flex flex-col gap-3 md:gap-4 opacity-50 pointer-events-none transition-opacity duration-300">
+					<div class="flex items-center justify-between shrink-0">
+						<span class="text-xs font-bold text-zinc-400" id="scan-status-text">آی‌پی برای اسکن: ۰ عدد</span>
+						<button type="button" id="btn-scan" onclick="simulateScan()" class="px-6 py-2 bg-transparent border-2 border-green-600 text-green-500 hover:bg-green-900/40 hover:text-green-400 font-bold rounded-md text-xs transition shadow-sm flex items-center justify-center gap-2">
+							<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+							شروع اسکن SNI
+						</button>
+					</div>
+				</div>
+			</div>
+			
+			<div id="scan-table-section" class="flex flex-col w-full md:w-[55%] lg:w-[60%] border border-amoled-border bg-amoled-input rounded-md overflow-hidden flex-1 min-h-[150px] md:min-h-[200px] relative opacity-50 pointer-events-none transition-opacity duration-300 mt-4 md:mt-0">
+				<div class="grid grid-cols-12 gap-2 p-2 border-b border-amoled-border bg-zinc-900/40 text-[10px] font-bold text-zinc-400 text-center shrink-0">
+					<div class="col-span-1">ردیف</div>
+					<div class="col-span-6 text-left pl-2">IP Address</div>
+					<div class="col-span-3">وضعیت</div>
+					<div class="col-span-2">پینگ</div>
+				</div>
+				<div id="results-container" class="overflow-y-auto flex-1 p-2 text-xs font-mono space-y-1">
+					<div class="h-full flex items-center justify-center text-zinc-600 font-sans text-xs">
+						منتظر دریافت آی‌پی...
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+		<div class="px-4 md:px-5 pb-4 md:pb-5 flex flex-col shrink-0 gap-2 md:gap-3 border-t border-amoled-border bg-zinc-900/30 pt-3 md:pt-4 mt-auto">
+			<div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden hidden shrink-0" id="scan-progress-container">
+				<div id="scan-progress-bar" class="bg-green-500 h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+			</div>
+			<div id="healthy-ip-count" class="text-green-500 font-bold text-sm text-center hidden"></div>
+			<button type="button" id="btn-copy" onclick="copyResults()" class="w-full py-2.5 bg-transparent border-2 border-amber-600 text-amber-500 hover:bg-amber-900/40 hover:text-amber-400 font-bold rounded-md text-xs transition shadow-sm flex items-center justify-center gap-2 hidden">
+				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+				کپی آی‌پی‌های سالم
+			</button>
+		</div>
+	</div>
+	
+	<div class="flex flex-col gap-4 relative z-10 w-full max-w-lg md:max-w-5xl">
+		<div class="flex flex-wrap items-center gap-3 sm:gap-4 justify-center">
+			<a href="https://github.com/panel-zeus/Z-E-U-S" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-amoled-card border border-amoled-border rounded-full shadow-sm hover:shadow-md transition text-sm font-bold text-zinc-300 hover:text-white group">
+				<svg class="w-5 h-5 group-hover:scale-110 transition" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z"/></svg>
+				گیت‌هاب
+			</a>
+			<a href="https://t.me/PANEL_ZEUS" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-amoled-card border border-amoled-border rounded-full shadow-sm hover:shadow-md transition text-sm font-bold text-zinc-300 hover:text-sky-400 group">
+				<svg class="w-5 h-5 text-sky-500 group-hover:scale-110 transition" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.94-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.37.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/></svg>
+				PANEL_ZEUS@
+			</a>
+			<a href="https://t.me/ZEUS_PANEL_BOT" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-amoled-card border border-amoled-border rounded-full shadow-sm hover:shadow-md transition text-sm font-bold text-amber-500 hover:text-amber-400 group">
+				<svg class="w-5 h-5 text-amber-500 group-hover:scale-110 transition" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+				ساخت رایگان پـنـل
+			</a>
+			<a href="https://donatonion.ir-netlify.workers.dev" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-amoled-card border border-amoled-border rounded-full shadow-sm hover:shadow-md transition text-sm font-bold text-red-500 hover:text-red-400 group">
+				<svg class="w-5 h-5 text-red-500 group-hover:scale-110 transition" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 9.24 3 10.91 3.81 12 5.08 13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+				دونیت
+			</a>
+		</div>
+	</div>
+	<div id="toast-container" class="fixed top-5 left-1/2 -translate-x-1/2 z-[9999] flex flex-col gap-2 pointer-events-none"></div>
+	
+	<div id="android-battery-warning" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
+		<div class="bg-amoled-card border border-red-900/50 rounded-lg p-6 max-w-sm w-[90%] flex flex-col gap-4 text-center shadow-[0_0_20px_rgba(220,38,38,0.2)] transform scale-95 transition-transform duration-300">
+			<svg class="w-12 h-12 text-red-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+			<h3 class="text-red-500 font-bold text-lg">ارتباط با هسته قطع شد!</h3>
+			<p class="text-zinc-300 text-sm leading-relaxed">به علت بسته شدن پایتون در پس‌زمینه، اسکنر قطع شد. لطفاً در تنظیمات باتری گوشی، محدودیت‌های این برنامه را روی <b class="text-white" dir="ltr">No restrictions</b> (بدون محدودیت) قرار دهید.</p>
+			<button onclick="document.getElementById('android-battery-warning').classList.replace('opacity-100', 'opacity-0'); document.getElementById('android-battery-warning').classList.add('pointer-events-none'); document.querySelector('#android-battery-warning div').classList.replace('scale-100', 'scale-95');" class="mt-2 w-full py-2 bg-red-900/40 text-red-400 border border-red-800 rounded-md font-bold text-xs hover:bg-red-900/60 transition">متوجه شدم</button>
+		</div>
+	</div>
+	
+	<script>
+		let cachedIpsData = {};
+		let fetchedIPs = [];
+		let healthyIPs = [];
+		
+		function toggleAccordion(mode) {
+			const githubContent = document.getElementById('content-github');
+			const manualContent = document.getElementById('content-manual');
+			const githubIcon = document.getElementById('icon-github');
+			const manualIcon = document.getElementById('icon-manual');
+			if (mode === 'github') {
+				githubContent.classList.remove('hidden');
+				manualContent.classList.add('hidden');
+				githubIcon.classList.add('rotate-180');
+				manualIcon.classList.remove('rotate-180');
+			} else {
+				manualContent.classList.remove('hidden');
+				githubContent.classList.add('hidden');
+				manualIcon.classList.add('rotate-180');
+				githubIcon.classList.remove('rotate-180');
+			}
+		}
+		
+		function showToast(message, type = 'success') {
+			const container = document.getElementById('toast-container');
+			const toast = document.createElement('div');
+			const colors = type === 'error' 
+				? 'bg-red-900/40 border-red-800 text-red-400' 
+				: 'bg-green-900/40 border-green-800 text-green-400';
+			toast.className = 'px-4 py-3 border rounded-md shadow-lg font-bold text-sm transform transition-all duration-300 -translate-y-full opacity-0 ' + colors;
+			toast.innerText = message;
+			container.appendChild(toast);
+			requestAnimationFrame(() => toast.classList.remove('-translate-y-full', 'opacity-0'));
+			setTimeout(() => {
+				toast.classList.add('-translate-y-full', 'opacity-0');
+				setTimeout(() => toast.remove(), 300);
+			}, 3000);
+		}
+		
+		function extractSNI(input) {
+			let val = input.trim();
+			if (!val) return "";
+			if (!val.startsWith("http://") && !val.startsWith("https://")) {
+				val = "https://" + val;
+			}
+			try { return new URL(val).hostname; } 
+			catch (e) { return input.trim().split('/')[0].split(':')[0]; }
+		}
+		
+		async function fetchWithFallbackUI(path, options = {}) {
+			const primaryUrl = 'https://aeq6hj1i43heizbdbt2xyqu3aufyl.1bwxwrj26kxbybdc0iplho2iqdt25shgo.workers.dev/' + path;
+			const fallbackUrl1 = 'https://j36x9hin3gpmjmwl3aqsu1gypunbw53qr.pages.dev/' + path;
+			const fallbackUrl2 = 'https://raw.githubusercontent.com/panel-zeus/Z-E-U-S/refs/heads/main/' + path;
+			
+			try {
+				const res1 = await fetch(primaryUrl, options);
+				if (res1.ok) return res1;
+			} catch (e) {}
+			
+			try {
+				const res2 = await fetch(fallbackUrl1, options);
+				if (res2.ok) return res2;
+			} catch (e) {}
+			
+			return await fetch(fallbackUrl2, options);
+		}
+		
+		async function loadIpsFromGithub() {
+			const btn = document.getElementById('btn-fetch');
+			const dataType = document.getElementById('data-type-select') ? document.getElementById('data-type-select').value : 'ips.txt';
+			
+			btn.disabled = true;
+			btn.innerHTML = `
+				<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+				در حال ارتباط با گیت‌هاب...
+			`;
+			
+			try {
+				const response = await fetchWithFallbackUI(dataType + '?t=' + Date.now());
+				if (!response.ok) throw new Error('Fetch failed');
+				const text = await response.text();
+				const blocks = text.split('----------');
+				cachedIpsData = {};
+				blocks.forEach(block => {
+					const lines = block.trim().split('\n').map(l => l.trim()).filter(l => l.length > 0);
+					if (lines.length === 0) return;
+					let opName = "Unknown";
+					const ips = [];
+					lines.forEach(line => {
+						if (line.includes('#')) {
+							opName = line.split('#')[1].trim();
+						} else if (!line.startsWith('[source')) {
+							ips.push(line);
+						}
+					});
+					if (ips.length > 0) cachedIpsData[opName] = ips;
+				});
+				
+				btn.disabled = false;
+				btn.innerHTML = `
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+					دریافت داده‌ها از مخزن
+				`;
+			} catch (err) {
+				showToast('خطا در دریافت لیست از گیت‌هاب', 'error');
+				btn.innerHTML = 'خطا در ارتباط (تلاش مجدد)';
+				btn.disabled = false;
+				btn.onclick = loadIpsFromGithub;
+			}
+		}
+		document.addEventListener('DOMContentLoaded', loadIpsFromGithub);
+		
+		function setupScannerUI(ipList, successMessage) {
+			fetchedIPs = ipList;
+			document.getElementById('scan-controls-section').classList.remove('opacity-50', 'pointer-events-none');
+			document.getElementById('scan-table-section').classList.remove('opacity-50', 'pointer-events-none');
+			document.getElementById('scan-status-text').innerText = `آی‌پی برای اسکن: ${fetchedIPs.length} عدد`;
+			const resultsContainer = document.getElementById('results-container');
+			resultsContainer.innerHTML = fetchedIPs.map((ip, i) => `
+				<div class="grid grid-cols-12 gap-2 items-center py-1.5 border-b border-amoled-border/50 text-zinc-400">
+					<div class="col-span-1 text-center">${i + 1}</div>
+					<div class="col-span-6 text-left pl-2 truncate" title="${ip}">${ip}</div>
+					<div class="col-span-3 text-center text-[10px]">در انتظار</div>
+					<div class="col-span-2 text-center">-</div>
+				</div>
+			`).join('');
+			document.getElementById('btn-copy').classList.add('hidden');
+			document.getElementById('scan-progress-container').classList.add('hidden');
+			document.getElementById('healthy-ip-count').classList.add('hidden');
+			healthyIPs = [];
+			showToast(successMessage);
+		}
+		
+		function fetchIpsForScan() {
+			let count = parseInt(document.getElementById('ip-count').value, 10);
+			if (isNaN(count) || count < 1) count = 20;
+			let availableIps = [];
+			Object.values(cachedIpsData).forEach(ips => { availableIps = availableIps.concat(ips); });
+			availableIps = [...new Set(availableIps)];
+			
+			if(availableIps.length === 0) {
+				showToast('داده‌ای برای اسکن یافت نشد!', 'error');
+				return;
+			}
+			
+			let selectedIps = [];
+			if (count >= availableIps.length) {
+				selectedIps = availableIps;
+			} else {
+				const shuffled = availableIps.slice();
+				for (let i = shuffled.length - 1; i > 0; i--) {
+					const j = Math.floor(Math.random() * (i + 1));
+					[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+				}
+				selectedIps = shuffled.slice(0, count);
+			}
+			setupScannerUI(selectedIps, `${selectedIps.length} مورد با موفقیت از مخزن بارگزاری شد.`);
+		}
+		
+		function ipToLong(ip) { return ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet, 10), 0) >>> 0; }
+		function longToIp(long) { return [ (long >>> 24), (long >> 16 & 255), (long >> 8 & 255), (long & 255) ].join('.'); }
+		function expandCIDR(cidr) {
+			if (!cidr.includes('/')) return [cidr];
+			const parts = cidr.split('/');
+			const ip = parts[0];
+			const mask = parseInt(parts[1], 10);
+			if (isNaN(mask) || mask < 0 || mask > 32) return [ip];
+			const ipLong = ipToLong(ip);
+			const network = (ipLong & (-1 << (32 - mask))) >>> 0;
+			const broadcast = (network + Math.pow(2, (32 - mask)) - 1) >>> 0;
+			const result = [];
+			for (let i = network; i <= broadcast; i++) result.push(longToIp(i));
+			return result;
+		}
+		
+		function loadManualIps() {
+			const rawText = document.getElementById('manual-ips').value;
+			const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+			if (lines.length === 0) {
+				showToast('لطفاً حداقل یک آی‌پی یا دامنه وارد کنید!', 'error');
+				return;
+			}
+			let allIps = [];
+			lines.forEach(line => { allIps.push(...expandCIDR(line)); });
+			const uniqueIps = [...new Set(allIps)];
+			setupScannerUI(uniqueIps, `${uniqueIps.length} آی‌پی دستی با موفقیت بارگزاری شد.`);
+		}
+		
+		async function simulateScan() {
+			if(fetchedIPs.length === 0) return;
+			const rawSni = document.getElementById('sni-input').value;
+			let targetSni = extractSNI(rawSni);
+			if (!targetSni) {
+				targetSni = 'cloudflare.com';
+			}
+			
+			try { if ('wakeLock' in navigator) await navigator.wakeLock.request('screen'); } catch (e) {}
+
+			const btn = document.getElementById('btn-scan');
+			const progContainer = document.getElementById('scan-progress-container');
+			const progBar = document.getElementById('scan-progress-bar');
+			const resultsContainer = document.getElementById('results-container');
+			document.getElementById('healthy-ip-count').classList.add('hidden');
+			btn.disabled = true;
+			progContainer.classList.remove('hidden');
+			progBar.style.width = '0%';
+			healthyIPs = [];
+			let completed = 0;
+			
+			const BATCH_SIZE = 150; 
+			
+			const batches = [];
+			for (let i = 0; i < fetchedIPs.length; i += BATCH_SIZE) {
+				batches.push({
+					batch: fetchedIPs.slice(i, i + BATCH_SIZE),
+					indices: Array.from({length: fetchedIPs.slice(i, i + BATCH_SIZE).length}, (_, idx) => i + idx)
+				});
+			}
+
+			const processBatch = async (batchObj) => {
+				const { batch, indices } = batchObj;
+				indices.forEach(idx => {
+					const row = resultsContainer.children[idx];
+					row.innerHTML = `
+						<div class="col-span-1 text-center text-zinc-500">${idx + 1}</div>
+						<div class="col-span-6 text-left pl-2 text-zinc-100 truncate">${fetchedIPs[idx]}</div>
+						<div class="col-span-3 text-center text-[10px] font-bold text-amber-500">در حال تست...</div>
+						<div class="col-span-2 text-center text-amber-500">...</div>
+					`;
+				});
+				
+				let success = false;
+				let data = null;
+				let attempts = 0;
+				while (!success && attempts < 3) {
+					try {
+						const res = await fetch('/api/scan', {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({ ips: batch, sni: targetSni })
+						});
+						if (res.ok) {
+							data = await res.json();
+							success = true;
+						}
+					} catch (err) {
+						attempts++;
+						if (attempts < 3) await new Promise(r => setTimeout(r, 1000));
+					}
+				}
+
+				if (success && data && data.results) {
+					data.results.forEach(result => {
+						const idx = fetchedIPs.indexOf(result.ip);
+						if(idx === -1) return;
+						const row = resultsContainer.children[idx];
+						if (result.success) {
+							healthyIPs.push({ ip: result.ip, ping: result.ping });
+							let pColor = "text-green-500";
+							if (result.ping <= 500) pColor = "text-green-700";
+							else if (result.ping <= 1000) pColor = "text-green-500";
+							else if (result.ping <= 1500) pColor = "text-yellow-500";
+							else pColor = "text-orange-500";
+							
+							row.innerHTML = `
+								<div class="col-span-1 text-center text-zinc-500">${idx + 1}</div>
+								<div class="col-span-6 text-left pl-2 text-zinc-100 truncate">${result.ip}</div>
+								<div class="col-span-3 text-center text-[10px] font-bold ${pColor}">موفق</div>
+								<div class="col-span-2 text-center ${pColor}">${result.ping}ms</div>
+							`;
+						} else {
+							row.innerHTML = `
+								<div class="col-span-1 text-center text-zinc-500">${idx + 1}</div>
+								<div class="col-span-6 text-left pl-2 text-zinc-600 truncate">${result.ip}</div>
+								<div class="col-span-3 text-center text-[10px] font-bold text-red-500">مردود / مسدود</div>
+								<div class="col-span-2 text-center text-red-500">-</div>
+							`;
+						}
+					});
+				} else {
+					indices.forEach(idx => {
+						resultsContainer.children[idx].innerHTML = `
+							<div class="col-span-1 text-center text-zinc-500">${idx + 1}</div>
+							<div class="col-span-6 text-left pl-2 text-zinc-600 truncate">${fetchedIPs[idx]}</div>
+							<div class="col-span-3 text-center text-[10px] font-bold text-red-500">خطا</div>
+							<div class="col-span-2 text-center text-red-500">-</div>
+						`;
+					});
+				}
+				completed += batch.length;
+				progBar.style.width = `${(completed / fetchedIPs.length) * 100}%`;
+			};
+
+			const MAX_CONCURRENT = 3; 
+			for (let i = 0; i < batches.length; i += MAX_CONCURRENT) {
+				const currentBatches = batches.slice(i, i + MAX_CONCURRENT);
+				await Promise.all(currentBatches.map(b => processBatch(b)));
+				await new Promise(r => setTimeout(r, 400));
+			}
+			
+			healthyIPs.sort((a, b) => a.ping - b.ping);
+			let finalHTML = "";
+			let rowIndex = 1;
+			healthyIPs.forEach(item => {
+				let pColor = "text-green-500";
+				if (item.ping <= 500) pColor = "text-green-700";
+				else if (item.ping <= 1000) pColor = "text-green-500";
+				else if (item.ping <= 1500) pColor = "text-yellow-500";
+				else pColor = "text-orange-500";
+				finalHTML += `
+					<div class="grid grid-cols-12 gap-2 items-center py-1.5 border-b border-amoled-border/50 text-zinc-400">
+						<div class="col-span-1 text-center text-zinc-500">${rowIndex++}</div>
+						<div class="col-span-6 text-left pl-2 text-zinc-100 truncate">${item.ip}</div>
+						<div class="col-span-3 text-center text-[10px] font-bold ${pColor}">موفق</div>
+						<div class="col-span-2 text-center ${pColor}">${item.ping}ms</div>
+					</div>`;
+			});
+			fetchedIPs.forEach(ip => {
+				if (!healthyIPs.find(h => h.ip === ip)) {
+					finalHTML += `
+						<div class="grid grid-cols-12 gap-2 items-center py-1.5 border-b border-amoled-border/50 text-zinc-400">
+							<div class="col-span-1 text-center text-zinc-500">${rowIndex++}</div>
+							<div class="col-span-6 text-left pl-2 text-zinc-600 truncate">${ip}</div>
+							<div class="col-span-3 text-center text-[10px] font-bold text-red-500">مردود / مسدود</div>
+							<div class="col-span-2 text-center text-red-500">-</div>
+						</div>`;
+				}
+			});
+			resultsContainer.innerHTML = finalHTML;
+			
+			btn.disabled = false;
+			document.getElementById('btn-copy').classList.remove('hidden');
+			const healthyCountEl = document.getElementById('healthy-ip-count');
+			healthyCountEl.innerText = `${healthyIPs.length} آی‌پی کاملا سالم پیدا شد.`;
+			healthyCountEl.classList.remove('hidden');
+			showToast(`اسکن پایان یافت. ${healthyIPs.length} آی‌پی سالم پیدا شد.`);
+		}
+
+		function copyResults() {
+			if(healthyIPs.length === 0) {
+				showToast('آی‌پی سالمی برای کپی وجود ندارد!', 'error');
+				return;
+			}
+			const ipsToCopy = healthyIPs.map(h => h.ip).join('\n');
+			navigator.clipboard.writeText(ipsToCopy).then(() => {
+				showToast(`${healthyIPs.length} آی‌پی با موفقیت کپی شد.`);
+			});
+		}
+
+		function updateCoreStatus(isOnline) {
+			const statusDot = document.getElementById('core-status');
+			const pingAnim = document.getElementById('core-status-ping');
+			if (isOnline) {
+				statusDot.className = 'flex w-3 h-3 ml-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)] transition-colors duration-300 relative';
+				statusDot.title = 'هسته متصل است';
+				if(pingAnim) pingAnim.classList.remove('hidden');
+			} else {
+				statusDot.className = 'flex w-3 h-3 ml-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.9)] transition-colors duration-300 relative';
+				statusDot.title = 'هسته قطع شده است!';
+				if(pingAnim) pingAnim.classList.add('hidden');
+				
+				if (/Android/i.test(navigator.userAgent)) {
+					const warningModal = document.getElementById('android-battery-warning');
+					if (warningModal) {
+						warningModal.classList.remove('opacity-0', 'pointer-events-none');
+						warningModal.classList.add('opacity-100');
+						warningModal.querySelector('div').classList.replace('scale-95', 'scale-100');
+					}
+				}
+			}
+		}
+
+		let missedPings = 0;
+		setInterval(async () => {
+			try {
+				const controller = new AbortController();
+				const timeoutId = setTimeout(() => controller.abort(), 8000); 
+				const res = await fetch('/api/ping', { cache: 'no-store', signal: controller.signal });
+				clearTimeout(timeoutId);
+				if (res.ok) {
+					missedPings = 0;
+					updateCoreStatus(true);
+				} else {
+					throw new Error('Bad response');
+				}
+			} catch (e) {
+				missedPings++;
+				if (missedPings >= 2) updateCoreStatus(false);
+			}
+		}, 2500);
+	</script>
+</body>
+</html>
+---PYTHON---
+import socket
+import ssl
+import time
+import json
+import threading
+import urllib.request
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from concurrent.futures import ThreadPoolExecutor
+
+PORT = 8000
+SCAN_EXECUTOR = ThreadPoolExecutor(max_workers=100)
+ZEUS_URL = "https://aeq6hj1i43heizbdbt2xyqu3aufyl.1bwxwrj26kxbybdc0iplho2iqdt25shgo.workers.dev/zeus-scanner.txt"
+
+try:
+    _req = urllib.request.Request(ZEUS_URL, headers={'User-Agent': 'Mozilla/5.0'})
+    _txt = urllib.request.urlopen(_req).read().decode('utf-8')
+    HTML_CONTENT = _txt.split('---HTML---')[1].split('---PYTH' + 'ON---')[0].strip()
+except Exception as e:
+    HTML_CONTENT = f"Error loading UI: {e}"
+
+def scan_ip(ip, target_sni, timeout=3.5):
+    successful_pings = []
+    last_error = "failed"
+    for _ in range(3):
+        start_time = time.time()
+        try:
+            with socket.create_connection((ip, 443), timeout=timeout) as sock:
+                context = ssl.create_default_context()
+                context.check_hostname = False
+                context.verify_mode = ssl.CERT_NONE
+                with context.wrap_socket(sock, server_hostname=target_sni) as ssock:
+                    req = f"GET / HTTP/1.1\r\nHost: {target_sni}\r\nUser-Agent: Zeus-Scanner\r\nConnection: close\r\n\r\n"
+                    ssock.sendall(req.encode('ascii'))
+                    resp = ssock.recv(2048)
+                    if resp.startswith(b"HTTP/1."):
+                        ping_ms = int((time.time() - start_time) * 1000)
+                        successful_pings.append(ping_ms)
+        except Exception as e:
+            last_error = str(e)
+            
+    if successful_pings:
+        avg_ping = sum(successful_pings) // len(successful_pings)
+        return {"ip": ip, "success": True, "ping": avg_ping}
+    else:
+        return {"ip": ip, "success": False, "error": last_error}
+
+class ZeusRequestHandler(BaseHTTPRequestHandler):
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.end_headers()
+    def do_GET(self):
+        if self.path == '/api/ping':
+            try:
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(b'{"status":"online"}')
+            except Exception:
+                pass
+            return
+        
+        if self.path == '/':
+            encoded_html = HTML_CONTENT.encode('utf-8')
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html; charset=utf-8')
+            self.send_header('Content-Length', str(len(encoded_html)))
+            self.end_headers()
+            try:
+                self.wfile.write(encoded_html)
+            except Exception:
+                pass
+        else:
+            self.send_response(404)
+            self.end_headers()
+    def do_POST(self):
+        try:
+            if self.path == '/api/scan':
+                content_length = int(self.headers['Content-Length'])
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data.decode('utf-8'))
+                ips = data.get('ips', [])
+                sni = data.get('sni', '')
+                results = []
+                if ips:
+                    futures = [SCAN_EXECUTOR.submit(scan_ip, ip, sni) for ip in ips]
+                    for future in futures:
+                        results.append(future.result())
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.send_header('Connection', 'close')
+                self.end_headers()
+                response_json = json.dumps({"results": results})
+                self.wfile.write(response_json.encode('utf-8'))
+        except Exception as e:
+            print(f"[CRASH PREVENTED] Server Error: {str(e)}")
+           
+    def log_message(self, format, *args):
+        pass
+
+if __name__ == '__main__':
+    httpd = None
+    while PORT <= 8010:
+        try:
+            server_address = ('127.0.0.1', PORT)
+            httpd = ThreadingHTTPServer(server_address, ZeusRequestHandler)
+            break
+        except OSError:
+            PORT += 1
+            
+    if not httpd:
+        print("\033[91mError: Could not find an open port between 8000 and 8010.\033[0m")
+        exit(1)
+
+    print("\033[96m==========================================\033[0m")
+    print("\033[92m  Zeus Scanner Core (Unified) is RUNNING!\033[0m")
+    print(f"\033[93m  Open in Browser: http://127.0.0.1:{PORT}/\033[0m")
+    print("\033[90m  Do NOT close this terminal during scan.\033[0m")
+    print("\033[96m==========================================\033[0m")
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    if httpd:
+        httpd.server_close()
+---POWERSHELL---
+$port = 8000
+$zeusUrl = "https://aeq6hj1i43heizbdbt2xyqu3aufyl.1bwxwrj26kxbybdc0iplho2iqdt25shgo.workers.dev/zeus-scanner.txt"
+
+try {
+    $wc = New-Object System.Net.WebClient
+    $wc.Encoding = [System.Text.Encoding]::UTF8
+    $wc.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
+    $txt = $wc.DownloadString($zeusUrl)
+    $htmlContent = ($txt -split '---HTML---')[1] -split ('---PYTH' + 'ON---') | Select-Object -First 1
+    $htmlContent = $htmlContent.Trim()
+} catch {
+    $htmlContent = "Error loading UI: $_"
+}
+
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12 -bor [System.Net.SecurityProtocolType]::Tls13
+$listener = New-Object System.Net.HttpListener
+
+$serverStarted = $false
+while (-not $serverStarted -and $port -le 8010) {
+    $url = "http://127.0.0.1:$port/"
+    $listener.Prefixes.Clear()
+    $listener.Prefixes.Add($url)
+    try {
+        $listener.Start()
+        $serverStarted = $true
+    } catch {
+        $port++
+    }
+}
+
+if (-not $serverStarted) {
+    Write-Host "Error: Could not find an open port between 8000 and 8010." -ForegroundColor Red
+    exit
+}
+
+Write-Host "==========================================" -ForegroundColor Cyan
+Write-Host "  Zeus Scanner Core (Unified) is RUNNING!" -ForegroundColor Green
+Write-Host "  Listening on: $url" -ForegroundColor Yellow
+Write-Host "  Do NOT close this window during scan." -ForegroundColor Gray
+Write-Host "==========================================" -ForegroundColor Cyan
+Start-Process $url
+
+try {
+    while ($listener.IsListening) {
+        $context = $listener.GetContext()
+        $request = $context.Request
+        $response = $context.Response
+        $response.AppendHeader("Access-Control-Allow-Origin", "*")
+        $response.AppendHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+        $response.AppendHeader("Access-Control-Allow-Headers", "Content-Type")
+        if ($request.HttpMethod -eq "OPTIONS") {
+            $response.StatusCode = 200
+            $response.Close()
+            continue
+        }
+        if ($request.Url.AbsolutePath -eq "/") {
+            $htmlBytes = [System.Text.Encoding]::UTF8.GetBytes($htmlContent)
+            $response.ContentType = "text/html; charset=utf-8"
+            $response.ContentLength64 = $htmlBytes.Length
+            $response.OutputStream.Write($htmlBytes, 0, $htmlBytes.Length)
+            $response.Close()
+        }
+		elseif ($request.Url.AbsolutePath -eq "/api/ping" -and $request.HttpMethod -eq "GET") {
+            $resBytes = [System.Text.Encoding]::UTF8.GetBytes('{"status":"online"}')
+            $response.ContentType = "application/json"
+            $response.ContentLength64 = $resBytes.Length
+            try { $response.OutputStream.Write($resBytes, 0, $resBytes.Length) } catch {}
+            $response.Close()
+        }
+        elseif ($request.Url.AbsolutePath -eq "/api/scan" -and $request.HttpMethod -eq "POST") {
+            $reader = New-Object System.IO.StreamReader($request.InputStream, $request.ContentEncoding)
+            $body = $reader.ReadToEnd()
+            $json = $body | ConvertFrom-Json
+            $ips = @()
+            if ($null -ne $json.ips) { $ips = $json.ips }
+            elseif ($null -ne $json.ip) { $ips += $json.ip }
+            $sni = $json.sni
+            
+            $timeoutMs = 3500
+            $totalPasses = 3
+            
+            $ipPings = @{}
+            foreach ($ip in $ips) {
+                $ipPings[$ip] = [System.Collections.ArrayList]::new()
+            }
+            
+            for ($pass = 0; $pass -lt $totalPasses; $pass++) {
+                $tasks = @()
+                foreach ($ip in $ips) {
+                    if ($ip -match ":") {
+                        $tcp = New-Object System.Net.Sockets.TcpClient([System.Net.Sockets.AddressFamily]::InterNetworkV6)
+                    } else {
+                        $tcp = New-Object System.Net.Sockets.TcpClient([System.Net.Sockets.AddressFamily]::InterNetwork)
+                    }
+                    $sw = [System.Diagnostics.Stopwatch]::StartNew()
+                    try {
+                        $asyncResult = $tcp.BeginConnect($ip, 443, $null, $null)
+                        $tasks += [PSCustomObject]@{ 
+                            IP = $ip; 
+                            Tcp = $tcp; 
+                            AsyncResult = $asyncResult; 
+                            Stopwatch = $sw; 
+                            State = 0; 
+                            Success = $false; 
+                            Ping = 0;
+                            SslStream = $null;
+                            SslAsyncResult = $null;
+                            ReadAsyncResult = $null;
+                            Buffer = New-Object byte[] 2048
+                        }
+                    } catch {}
+                }
+                
+                $overallSw = [System.Diagnostics.Stopwatch]::StartNew()
+                while ($overallSw.ElapsedMilliseconds -lt $timeoutMs) {
+                    $allDone = $true
+                    foreach ($task in $tasks) {
+                        if ($task.State -eq 0) {
+                            $allDone = $false
+                            if ($task.AsyncResult.IsCompleted) {
+                                try {
+                                    $task.Tcp.EndConnect($task.AsyncResult)
+                                    $stream = $task.Tcp.GetStream()
+                                    $task.SslStream = New-Object System.Net.Security.SslStream($stream)
+                                    $task.SslAsyncResult = $task.SslStream.BeginAuthenticateAsClient($sni, $null, $null)
+                                    $task.State = 1
+                                } catch {
+                                    $task.State = 3
+                                }
+                            }
+                        }
+                        elseif ($task.State -eq 1) {
+                            $allDone = $false
+                            if ($task.SslAsyncResult.IsCompleted) {
+                                try {
+                                    $task.SslStream.EndAuthenticateAsClient($task.SslAsyncResult)
+                                    $reqStr = "GET / HTTP/1.1`r`nHost: $sni`r`nUser-Agent: Zeus-Scanner`r`nConnection: close`r`n`r`n"
+                                    $reqBytes = [System.Text.Encoding]::ASCII.GetBytes($reqStr)
+                                    $task.SslStream.Write($reqBytes, 0, $reqBytes.Length)
+                                    $task.ReadAsyncResult = $task.SslStream.BeginRead($task.Buffer, 0, $task.Buffer.Length, $null, $null)
+                                    $task.State = 2
+                                } catch {
+                                    $task.State = 3
+                                }
+                            }
+                        }
+                        elseif ($task.State -eq 2) {
+                            $allDone = $false
+                            if ($task.ReadAsyncResult.IsCompleted) {
+                                $task.Stopwatch.Stop()
+                                try {
+                                    $bytesRead = $task.SslStream.EndRead($task.ReadAsyncResult)
+                                    if ($bytesRead -gt 0) {
+                                        $resp = [System.Text.Encoding]::ASCII.GetString($task.Buffer, 0, $bytesRead)
+                                        if ($resp -match "^HTTP/1\.[01]") {
+                                            $task.Success = $true
+                                            $task.Ping = $task.Stopwatch.ElapsedMilliseconds
+                                        }
+                                    }
+                                } catch {}
+                                $task.State = 3
+                            }
+                        }
+                    }
+                    if ($allDone) { break }
+                    Start-Sleep -Milliseconds 10
+                }
+                
+                foreach ($task in $tasks) {
+                    if ($task.Success) {
+                        [void]$ipPings[$task.IP].Add($task.Ping)
+                    }
+                    if ($null -ne $task.SslStream) { $task.SslStream.Close() }
+                    if ($null -ne $task.Tcp) { $task.Tcp.Close() }
+                }
+            }
+            
+            $results = @()
+            foreach ($ip in $ips) {
+                if ($ipPings[$ip].Count -gt 0) {
+                    $sum = 0
+                    foreach ($p in $ipPings[$ip]) { $sum += $p }
+                    $avgPing = [math]::Floor($sum / $ipPings[$ip].Count)
+                    $results += @{ ip = $ip; success = $true; ping = $avgPing }
+                } else {
+                    $results += @{ ip = $ip; success = $false; error = "failed" }
+                }
+            }
+            
+            $resObj = @{ results = $results }
+            $resJson = ConvertTo-Json -InputObject $resObj -Compress -Depth 3
+            $resBytes = [System.Text.Encoding]::UTF8.GetBytes($resJson)
+            $response.ContentType = "application/json"
+            $response.ContentLength64 = $resBytes.Length
+            $response.OutputStream.Write($resBytes, 0, $resBytes.Length)
+            $response.Close()
+        }
+        else {
+            $response.StatusCode = 404
+            $response.Close()
+        }
+    }
+}
+catch {}
+finally {
+    $listener.Stop()
+}
